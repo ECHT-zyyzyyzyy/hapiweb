@@ -1,0 +1,322 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hapiweb.test_block.dao.BlockMapper">
+  <resultMap id="BaseResultMap" type="com.hapiweb.test_block.entity.Block">
+    <constructor>
+      <idArg column="GENKEY" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="NAME" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="DISC" javaType="java.lang.String" jdbcType="VARCHAR" />
+    </constructor>
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    GENKEY, NAME, DISC
+  </sql>
+  <select id="selectByExample" parameterType="com.hapiweb.test_block.entity.BlockExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    from block
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from block
+    where GENKEY = #{genkey,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from block
+    where GENKEY = #{genkey,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.hapiweb.test_block.entity.BlockExample">
+    delete from block
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.hapiweb.test_block.entity.Block">
+    insert into block (GENKEY, NAME, DISC
+      )
+    values (#{genkey,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{disc,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.hapiweb.test_block.entity.Block">
+    insert into block
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="genkey != null">
+        GENKEY,
+      </if>
+      <if test="name != null">
+        NAME,
+      </if>
+      <if test="disc != null">
+        DISC,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="genkey != null">
+        #{genkey,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="disc != null">
+        #{disc,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.hapiweb.test_block.entity.BlockExample" resultType="java.lang.Long">
+    select count(*) from block
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update block
+    <set>
+      <if test="record.genkey != null">
+        GENKEY = #{record.genkey,jdbcType=VARCHAR},
+      </if>
+      <if test="record.name != null">
+        NAME = #{record.name,jdbcType=VARCHAR},
+      </if>
+      <if test="record.disc != null">
+        DISC = #{record.disc,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update block
+    set GENKEY = #{record.genkey,jdbcType=VARCHAR},
+      NAME = #{record.name,jdbcType=VARCHAR},
+      DISC = #{record.disc,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.hapiweb.test_block.entity.Block">
+    update block
+    <set>
+      <if test="name != null">
+        NAME = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="disc != null">
+        DISC = #{disc,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where GENKEY = #{genkey,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.hapiweb.test_block.entity.Block">
+    update block
+    set NAME = #{name,jdbcType=VARCHAR},
+      DISC = #{disc,jdbcType=VARCHAR}
+    where GENKEY = #{genkey,jdbcType=VARCHAR}
+  </update>
+  <resultMap id="BaseResultMap" type="com.hapiweb.test_block.entity.Block">
+    <constructor>
+      <idArg column="GENKEY" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="NAME" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="DISC" javaType="java.lang.String" jdbcType="VARCHAR" />
+    </constructor>
+  </resultMap>
+  <sql id="Base_Column_List">
+    GENKEY, NAME, DISC
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from block
+    where GENKEY = #{genkey,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from block
+    where GENKEY = #{genkey,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.hapiweb.test_block.entity.Block">
+    insert into block (GENKEY, NAME, DISC
+      )
+    values (#{genkey,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{disc,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.hapiweb.test_block.entity.Block">
+    insert into block
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="genkey != null">
+        GENKEY,
+      </if>
+      <if test="name != null">
+        NAME,
+      </if>
+      <if test="disc != null">
+        DISC,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="genkey != null">
+        #{genkey,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="disc != null">
+        #{disc,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.hapiweb.test_block.entity.Block">
+    update block
+    <set>
+      <if test="name != null">
+        NAME = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="disc != null">
+        DISC = #{disc,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where GENKEY = #{genkey,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.hapiweb.test_block.entity.Block">
+    update block
+    set NAME = #{name,jdbcType=VARCHAR},
+      DISC = #{disc,jdbcType=VARCHAR}
+    where GENKEY = #{genkey,jdbcType=VARCHAR}
+  </update>
+  <resultMap id="BaseResultMap" type="com.wglvzyx.mybatisredis.entity.Block">
+    <constructor>
+      <idArg column="GENKEY" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="NAME" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="DISC" javaType="java.lang.String" jdbcType="VARCHAR" />
+    </constructor>
+  </resultMap>
+  <sql id="Base_Column_List">
+    GENKEY, NAME, DISC
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from block
+    where GENKEY = #{genkey,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from block
+    where GENKEY = #{genkey,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.wglvzyx.mybatisredis.entity.Block">
+    insert into block (GENKEY, NAME, DISC
+      )
+    values (#{genkey,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{disc,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.wglvzyx.mybatisredis.entity.Block">
+    insert into block
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="genkey != null">
+        GENKEY,
+      </if>
+      <if test="name != null">
+        NAME,
+      </if>
+      <if test="disc != null">
+        DISC,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="genkey != null">
+        #{genkey,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="disc != null">
+        #{disc,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wglvzyx.mybatisredis.entity.Block">
+    update block
+    <set>
+      <if test="name != null">
+        NAME = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="disc != null">
+        DISC = #{disc,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where GENKEY = #{genkey,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wglvzyx.mybatisredis.entity.Block">
+    update block
+    set NAME = #{name,jdbcType=VARCHAR},
+      DISC = #{disc,jdbcType=VARCHAR}
+    where GENKEY = #{genkey,jdbcType=VARCHAR}
+  </update>
+</mapper>
