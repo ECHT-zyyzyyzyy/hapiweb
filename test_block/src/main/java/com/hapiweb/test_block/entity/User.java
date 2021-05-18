@@ -1,7 +1,5 @@
 package com.hapiweb.test_block.entity;
 
-import lombok.Data;
-
 public class User {
     private String genkey;
 
