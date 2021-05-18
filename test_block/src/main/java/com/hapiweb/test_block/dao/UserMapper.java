@@ -2,7 +2,6 @@ package com.hapiweb.test_block.dao;
 
 import com.hapiweb.test_block.entity.User;
 import com.hapiweb.test_block.entity.UserExample;
-import com.hapiweb.test_block.entity.UserWithBLOBs;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
@@ -11,27 +10,21 @@ public interface UserMapper {
 
     int deleteByExample(UserExample example);
 
-    int deleteByPrimaryKey(String user);
+    int deleteByPrimaryKey(String genkey);
 
-    int insert(UserWithBLOBs record);
+    int insert(User record);
 
-    int insertSelective(UserWithBLOBs record);
-
-    List<UserWithBLOBs> selectByExampleWithBLOBs(UserExample example);
+    int insertSelective(User record);
 
     List<User> selectByExample(UserExample example);
 
-    UserWithBLOBs selectByPrimaryKey(String user);
+    User selectByPrimaryKey(String genkey);
 
-    int updateByExampleSelective(@Param("record") UserWithBLOBs record, @Param("example") UserExample example);
-
-    int updateByExampleWithBLOBs(@Param("record") UserWithBLOBs record, @Param("example") UserExample example);
+    int updateByExampleSelective(@Param("record") User record, @Param("example") UserExample example);
 
     int updateByExample(@Param("record") User record, @Param("example") UserExample example);
 
-    int updateByPrimaryKeySelective(UserWithBLOBs record);
-
-    int updateByPrimaryKeyWithBLOBs(UserWithBLOBs record);
+    int updateByPrimaryKeySelective(User record);
 
     int updateByPrimaryKey(User record);
 }

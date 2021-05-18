@@ -1,13 +1,13 @@
 package com.hapiweb.test_block.service;
 
-import com.hapiweb.test_block.entity.User;
+import com.hapiweb.test_block.dto.UserDTO;
 
 public interface UserService {
 
-    public User register(User user);
+    public UserDTO register(UserDTO userDTO);
 
-    public User signin(User user);
+    public UserDTO signin(UserDTO userDTO);
 
-    public User signout(User user);
+    public UserDTO signout(UserDTO userDTO);
 
 }
