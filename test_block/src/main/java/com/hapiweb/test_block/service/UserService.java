@@ -6,7 +6,7 @@ public interface UserService {
 
     public UserDTO register(UserDTO userDTO);
 
-    public UserDTO signin(UserDTO userDTO);
+    public UserDTO signinByUsername(UserDTO userDTO);
 
     public UserDTO signout(UserDTO userDTO);
 

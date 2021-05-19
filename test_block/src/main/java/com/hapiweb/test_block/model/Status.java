@@ -5,9 +5,14 @@ public enum Status {
     NOTFOUND("PAGE_NOT_FOUND", 404, "The uri does not exist"),
     INTERNAL("SERVER_INTERNAL_PROBLEM", 405, "There are some unexpected problem happens during the processing"),
 
+    CANT_BE_EMPTY("CANT_BE_EMPTY", 600, "Username Or Password must not bu empty"),
+
+    SIGNIN_SUCCESS("SIGNIN_SUCCESS", 700, "Signin successfuly"),
+    USER_OR_PW_ERR("USER_DOES_NOT_EXIST_OR_PASSWORD_INCORRECT", 701, "User does not exist or password wrong"),
+
     REGISTER_SUCCESS("REGISTER_SUCCESS", 800, "Successfully Registed"),
     USER_ALREADY_EXISTS("USER_ALREADY_EXISTS", 801, "The username has bean cattaloged by anothoer person"),
-    CANT_BE_EMPTY("CANT_BE_EMPTY", 802, "Column Username Or Password must not bu empty"),
+
 
     ;
 
