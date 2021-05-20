@@ -30,7 +30,7 @@ public class UserServiceImpl implements UserService {
 
     public String getToken(User user) {
         String token="";
-        token= JWT.create().withAudience(user.getGenkey())
+        token= JWT.create().withAudience(user.getUsername())
                 .sign(Algorithm.HMAC256(user.getPassword()));
         return token;
     }
@@ -127,4 +127,18 @@ public class UserServiceImpl implements UserService {
         return null;
     }
 
+    @Override
+    public User findUserByUsername(String username) {
+        if(username!=null&&username.trim()!=""){
+            UserExample userExample = new UserExample();
+            UserExample.Criteria criteria = userExample.createCriteria();
+            criteria.andUsernameEqualTo(username);
+            List<User> users = userMapper.selectByExample(userExample);
+            if(users.size()!=0){
+                User user = users.get(0);
+                return user;
+            }
+        }
+        return null;
+    }
 }
