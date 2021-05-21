@@ -8,15 +8,13 @@ import com.hapiweb.test_block.entity.User;
 import com.hapiweb.test_block.entity.UserExample;
 import com.hapiweb.test_block.model.Status;
 import com.hapiweb.test_block.service.UserService;
+import com.hapiweb.test_block.utils.RedisUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -24,11 +22,23 @@ public class UserServiceImpl implements UserService {
     @Autowired
     UserMapper userMapper;
 
+    @Autowired
+    RedisUtils redisUtils;
+
     public String getPk(){
         return UUID.randomUUID().toString();
     }
 
-    public String getToken(User user) {
+    public String getAccToken(){
+        Integer t = 0;
+        Random random = new Random();
+        for(int i=0;i<16;i++){
+            t = t*10 + random.nextInt(10);
+        }
+        return t.toString();
+    }
+
+    public String getRefToken(User user) {
         String token="";
         token= JWT.create().withAudience(user.getUsername())
                 .sign(Algorithm.HMAC256(user.getPassword()));
@@ -114,10 +124,12 @@ public class UserServiceImpl implements UserService {
         userDTOrt.setCode(Status.SIGNIN_SUCCESS.getCode());
         userDTOrt.setMessage((Status.SIGNIN_SUCCESS.getDisc()));
         userDTOrt.setUser(queryed);
-        String token = getToken(userDTOrt.getUser());
-        Map<String, String> tokenMap = new HashMap<>();
-
-        userDTOrt.setToken(token);
+        String refToken = getRefToken(userDTOrt.getUser());
+        String accToken = getAccToken();
+        while(redisUtils.haskey(accToken))
+            accToken = getAccToken();
+        userDTOrt.setRefToken(refToken);
+        userDTOrt.setAccToken(accToken);
         //5、返回用户与token
         return userDTOrt;
     }

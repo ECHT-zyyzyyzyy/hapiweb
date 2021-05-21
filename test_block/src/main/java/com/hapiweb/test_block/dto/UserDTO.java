@@ -12,6 +12,7 @@ public class UserDTO {
     private Integer code;
     private String message;
 
-    private String token;
+    private String refToken;
+    private String accToken;
 
 }
