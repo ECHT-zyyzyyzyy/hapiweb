@@ -8,9 +8,10 @@ import com.hapiweb.test_block.entity.User;
 import com.hapiweb.test_block.entity.UserExample;
 import com.hapiweb.test_block.model.Status;
 import com.hapiweb.test_block.service.UserService;
-import com.hapiweb.test_block.utils.RedisUtils;
+import com.hapiweb.test_block.utils.RedisUtilsSS;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,28 +24,21 @@ public class UserServiceImpl implements UserService {
     UserMapper userMapper;
 
     @Autowired
-    RedisUtils redisUtils;
+    RedisUtilsSS redisUtilsSS;
 
-    public String getPk(){
-        return UUID.randomUUID().toString();
+
+    public static synchronized String getPk(){
+        return UUID.randomUUID().toString().replaceAll("-", "");
     }
 
-    public String getAccToken(){
-        Integer t = 0;
-        Random random = new Random();
-        for(int i=0;i<16;i++){
-            t = t*10 + random.nextInt(10);
+    public static synchronized String rCode() {
+        char[] chars = new char[6];
+        Random rnd = new Random();
+        for (int i = 0; i < 6; i++) {
+            chars[i] = (char) ('0' + rnd.nextInt(10));
         }
-        return t.toString();
+        return new String(chars);
     }
-
-    public String getRefToken(User user) {
-        String token="";
-        token= JWT.create().withAudience(user.getUsername())
-                .sign(Algorithm.HMAC256(user.getPassword()));
-        return token;
-    }
-
 
     @Override
     @Transactional
@@ -110,7 +104,7 @@ public class UserServiceImpl implements UserService {
         if(result.size()!=0){
             queryed = result.get(0);
             //3、检查密码是否正确
-            if(userDTO.getUser().getPassword()==queryed.getPassword())
+            if(userDTO.getUser().getPassword().equals(queryed.getPassword()))
                 signinflag = true;
         }
         if (!signinflag){
@@ -124,12 +118,7 @@ public class UserServiceImpl implements UserService {
         userDTOrt.setCode(Status.SIGNIN_SUCCESS.getCode());
         userDTOrt.setMessage((Status.SIGNIN_SUCCESS.getDisc()));
         userDTOrt.setUser(queryed);
-        String refToken = getRefToken(userDTOrt.getUser());
-        String accToken = getAccToken();
-        while(redisUtils.haskey(accToken))
-            accToken = getAccToken();
-        userDTOrt.setRefToken(refToken);
-        userDTOrt.setAccToken(accToken);
+        userDTOrt.setToken(rCode());
         //5、返回用户与token
         return userDTOrt;
     }

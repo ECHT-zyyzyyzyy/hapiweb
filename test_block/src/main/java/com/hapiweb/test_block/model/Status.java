@@ -9,6 +9,7 @@ public enum Status {
 
     SIGNIN_SUCCESS("SIGNIN_SUCCESS", 700, "Signin successfuly"),
     USER_OR_PW_ERR("USER_DOES_NOT_EXIST_OR_PASSWORD_INCORRECT", 701, "User does not exist or password wrong"),
+    SIGNOUT_SUCCESS("SIGNOUT_SUCCESS", 709, "Signout successfully"),
 
     REGISTER_SUCCESS("REGISTER_SUCCESS", 800, "Successfully Registed"),
     USER_ALREADY_EXISTS("USER_ALREADY_EXISTS", 801, "The username has bean cattaloged by anothoer person"),

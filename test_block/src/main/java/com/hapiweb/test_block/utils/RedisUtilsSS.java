@@ -10,7 +10,7 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 @Component
-public class RedisUtils {
+public class RedisUtilsSS {
 
     @Autowired
     @Qualifier("redisTemplateStringString")
