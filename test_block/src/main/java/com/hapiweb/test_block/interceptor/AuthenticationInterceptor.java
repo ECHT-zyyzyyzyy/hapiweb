@@ -11,10 +11,10 @@ import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Method;
-import java.util.Set;
 
 public class AuthenticationInterceptor implements HandlerInterceptor {
 
@@ -23,7 +23,14 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object object) throws Exception {
-        String token = httpServletRequest.getHeader("token");// 从 http 请求头中取出 token
+
+        String token = null;
+        Cookie[] cookies = httpServletRequest.getCookies();
+        for (Cookie cookie: cookies) {
+            if("token".equals(cookie.getName())){
+                token = cookie.getValue();
+            }
+        }
         // 如果不是映射到方法直接通过
         if (!(object instanceof HandlerMethod)) {
             return true;
@@ -48,8 +55,10 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
                 // 获取 token 中的 user id
                 String userId;
                 String rCode;
+                String password;
                 try {
                     userId = JWT.decode(token).getClaim("userId").asString();
+                    password = JWT.decode(token).getClaim("password").asString();
                     rCode = JWT.decode(token).getClaim("rCode").asString();
                 } catch (JWTDecodeException j) {
                     throw new RuntimeException("401");
@@ -59,9 +68,9 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
                     throw new RuntimeException("会话已过期，请重新登录");
                 }
                 // 验证 token
-                String id = httpServletRequest.getSession().getId();
-                if(!(id + "." + rCode).equals(userInfo))
+                if(!(password + "." + rCode).equals(userInfo))
                     throw new RuntimeException("401");
+                redisUtilsSO.set(userId, userInfo, 604800L);
                 return true;
             }
         }

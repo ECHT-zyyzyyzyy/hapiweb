@@ -7,7 +7,6 @@ import com.hapiweb.test_block.service.TokenService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
 import java.util.HashMap;
 
 @Service
@@ -25,6 +24,7 @@ public class TokenServiceImpl implements TokenService {
 
         HashMap<String, Object> claimMap = new HashMap<>();
         claimMap.put("userId", user.getGenkey());
+        claimMap.put("password", user.getPassword());
         claimMap.put("rCode", rCode);
 
         String token = "";

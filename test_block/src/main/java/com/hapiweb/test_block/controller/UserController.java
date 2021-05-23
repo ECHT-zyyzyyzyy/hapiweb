@@ -8,7 +8,9 @@ import com.hapiweb.test_block.utils.RedisUtilsSO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 @RestController
@@ -36,16 +38,17 @@ public class UserController {
 
     @PostMapping("/signinByUsername")
     @ResponseBody
-    public Object signin(HttpServletRequest request, @RequestBody UserDTO userIn){
+    public Object signin(HttpServletResponse response, @RequestBody UserDTO userIn){
 
-        HttpSession session = request.getSession();
-        String id = session.getId();
         UserDTO userOut = userService.signinByUsername(userIn);
         String rCode = userOut.getToken();
-        userOut.setToken(tokenService.createToken(id, userOut.getToken(), userOut.getUser()));
+        userOut.setToken(tokenService.createToken(userOut.getUser().getPassword(), userOut.getToken(), userOut.getUser()));
         if(userOut.getCode()==700){
-            redisUtilsSO.set(userOut.getUser().getGenkey(),id + "." + rCode , 604800L);
+            redisUtilsSO.set(userOut.getUser().getGenkey(),userOut.getUser().getPassword() + "." + rCode , 604800L);
         }
+        Cookie token = new Cookie("token", userOut.getToken());
+        token.setMaxAge(604800);
+        response.addCookie(token);
         return userOut;
 
     }
