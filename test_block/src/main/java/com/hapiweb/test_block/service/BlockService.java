@@ -9,6 +9,8 @@ public interface BlockService {
 
     public boolean editBlock(BlockDTO blockDTO);
 
+    public BlockDTO getBlockById(String id);
+
     public BlockDTO getBlockByName(BlockDTO blockDTO);
 
     public List<Block> list();

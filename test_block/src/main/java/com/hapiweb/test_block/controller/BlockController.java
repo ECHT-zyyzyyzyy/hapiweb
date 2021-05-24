@@ -24,4 +24,25 @@ public class BlockController {
         return blockListDTO;
     }
 
+    @GetMapping("/queryForList")
+    public BlockListDTO queryForList(@PathVariable String key){
+        List<Block> list = blockService.queryForList(key);
+        BlockListDTO blockListDTO = new BlockListDTO();
+        blockListDTO.setBlocks(list);
+        return blockListDTO;
+    }
+
+    @GetMapping("/getBlockById")
+    public BlockDTO getBlock(@PathVariable String id){
+        return blockService.getBlockById(id);
+    }
+
+    @PostMapping("/editBlock")
+    public BlockDTO editBlock(@RequestBody BlockDTO blockDTO){
+        if(blockService.editBlock(blockDTO))
+            return blockDTO;
+        BlockDTO blockDTO1 = new BlockDTO();
+        return blockDTO1;
+    }
+
 }

@@ -46,6 +46,14 @@ public class BlockServiceImpl implements BlockService {
     }
 
     @Override
+    public BlockDTO getBlockById(String id) {
+        Block block = blockMapper.selectByPrimaryKey(id);
+        BlockDTO blockDTO = new BlockDTO();
+        blockDTO.setBlock(block);
+        return blockDTO;
+    }
+
+    @Override
     public List<Block> list() {
         return blockMapper.selectByExample(null);
     }
