@@ -13,4 +13,8 @@ public interface PostService {
 
     public PostDTO editPost(PostDTO postDTO);
 
+    public PostDTO createPost(PostDTO postDTO);
+
+    public PostDTO deletePost(PostDTO postDTO);
+
 }
