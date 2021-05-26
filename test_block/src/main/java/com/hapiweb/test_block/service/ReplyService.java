@@ -2,6 +2,9 @@ package com.hapiweb.test_block.service;
 
 import com.hapiweb.test_block.dto.ReplyDTO;
 import com.hapiweb.test_block.dto.ReplyListDTO;
+import com.hapiweb.test_block.entity.Reply;
+
+import java.util.List;
 
 public interface ReplyService {
 
@@ -17,4 +20,7 @@ public interface ReplyService {
 
     public ReplyDTO delete(ReplyDTO replyDTO);
 
+    public Integer deleteByPostGK(String postGK);
+
+    public List<Reply> getReplyByPostGK(String key);
 }

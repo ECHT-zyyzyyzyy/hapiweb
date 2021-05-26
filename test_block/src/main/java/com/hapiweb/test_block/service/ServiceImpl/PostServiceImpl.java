@@ -6,6 +6,7 @@ import com.hapiweb.test_block.dto.PostListDTO;
 import com.hapiweb.test_block.entity.Post;
 import com.hapiweb.test_block.entity.PostExample;
 import com.hapiweb.test_block.service.PostService;
+import com.hapiweb.test_block.service.ReplyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,6 +19,9 @@ public class PostServiceImpl implements PostService {
 
     @Autowired
     private PostMapper postMapper;
+
+    @Autowired
+    private ReplyService replyService;
 
     public String getGK(){
         return UUID.randomUUID().toString().replace("-", "");
@@ -43,9 +47,11 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    @Transactional
     public PostDTO getPostById(String id) {
         PostDTO postDTO = new PostDTO();
         postDTO.setPost(postMapper.selectByPrimaryKey(id));
+        postDTO.setReplies(replyService.getReplyByPostGK(id));
         return postDTO;
     }
 
@@ -77,6 +83,7 @@ public class PostServiceImpl implements PostService {
     @Transactional
     public PostDTO deletePost(PostDTO postDTO) {
         if(postMapper.selectByPrimaryKey(postDTO.getPost().getGenkey())!=null){
+            replyService.deleteByPostGK(postDTO.getPost().getGenkey());
             postMapper.deleteByPrimaryKey(postDTO.getPost().getGenkey());
             return new PostDTO();
         }

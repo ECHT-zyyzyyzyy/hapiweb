@@ -8,6 +8,7 @@ import com.hapiweb.test_block.entity.ReplyExample;
 import com.hapiweb.test_block.service.ReplyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
@@ -76,8 +77,41 @@ public class ReplyServiceImpl implements ReplyService {
 
     @Override
     public ReplyDTO delete(ReplyDTO replyDTO) {
-        if(1 != replyMapper.deleteByPrimaryKey(replyDTO.getReply().getGenkey()))
+        try{
+            delete(replyDTO.getReply());
+        }catch(RuntimeException e){
+            e.printStackTrace();
             return null;
+        }
         return new ReplyDTO();
+    }
+
+    public boolean delete(Reply reply){
+        ReplyExample replyExample = new ReplyExample();
+        replyExample.createCriteria().andReplyToGkEqualTo(reply.getGenkey());
+        List<Reply> replies = replyMapper.selectByExample(replyExample);
+        if(replies.size()!=0)
+            replies.stream().map( item -> {
+                return delete(item);
+            }).count();
+        if(1== replyMapper.deleteByPrimaryKey(reply.getGenkey()))
+            return true;
+        throw new RuntimeException("回复删除错误");
+    }
+
+    @Override
+    @Transactional
+    public Integer deleteByPostGK(String postGK) {
+        ReplyExample replyExample = new ReplyExample();
+        replyExample.createCriteria().andPostGkEqualTo(postGK);
+        return replyMapper.deleteByExample(replyExample);
+    }
+
+    @Override
+    @Transactional
+    public List<Reply> getReplyByPostGK(String key) {
+        ReplyExample replyExample = new ReplyExample();
+        replyExample.createCriteria().andPostGkEqualTo(key);
+        return replyMapper.selectByExample(replyExample);
     }
 }
