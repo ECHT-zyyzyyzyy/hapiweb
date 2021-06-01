@@ -1,6 +1,5 @@
 <template>
   <div id="app">
-    你是煞笔吗？
     <router-view></router-view>
   </div>
 </template>
