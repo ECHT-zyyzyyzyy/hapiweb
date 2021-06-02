@@ -4,8 +4,12 @@ import router from './router'
 import store from './store'
 import './plugins/element.js'
 import './assets/css/global.css'
+import axios from 'axios'
 
 Vue.config.productionTip = false
+Vue.prototype.$http = axios
+
+axios.defaults.baseURL = ''
 
 new Vue({
   router,
