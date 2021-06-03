@@ -55,11 +55,13 @@ export default {
       this.$refs.loginFormRef.resetFields()
     },
     login () {
-      this.$refs.loginFormRef.validate(valid => {
+      this.$refs.loginFormRef.validate(async valid => {
         // console.log(valid)
-        if(!valid){
+        if (!valid) {
           return
         }
+        const result = await this.$http.get('/index/toIndex')
+        console.log(result)
       })
     }
   }
