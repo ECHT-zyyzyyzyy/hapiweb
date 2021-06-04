@@ -6,14 +6,14 @@
                 <img src="../assets/logo.png" alt="">
             </div>
             <!-- 登陆表单 -->
-            <el-form ref="loginFormRef" :rules="loginFormRules" :model="loginForm" label-width="0px" class="login_form">
+            <el-form ref="loginFormRef" :rules="loginFormRules" :model="userDto.user" label-width="0px" class="login_form">
                 <!-- 用户名 -->
                 <el-form-item prop="username">
-                    <el-input v-model="loginForm.username" prefix-icon="el-icon-user-solid"></el-input>
+                    <el-input v-model="userDto.user.username" prefix-icon="el-icon-user-solid"></el-input>
                 </el-form-item>
                 <!-- 密码 -->
                 <el-form-item prop="password">
-                    <el-input v-model="loginForm.password" prefix-icon="el-icon-lock" type="password"></el-input>
+                    <el-input v-model="userDto.user.password" prefix-icon="el-icon-lock" type="password"></el-input>
                 </el-form-item>
                 <!-- 按钮区域 -->
                 <el-form-item class="btns">
@@ -30,9 +30,11 @@ export default {
   data () {
     return {
       // 登录表单数据对象
-      loginForm: {
-        username: '',
-        password: ''
+      userDto: {
+        user: {
+          username: '',
+          password: ''
+        }
       },
       // 这是表单的验证规则对象
       loginFormRules: {
@@ -58,10 +60,15 @@ export default {
       this.$refs.loginFormRef.validate(async valid => {
         // console.log(valid)
         if (!valid) {
-          return
+          return console.log('用户名或密码错误')
         }
-        const result = await this.$http.get('/index/toIndex')
-        console.log(result)
+        console.log(JSON.stringify(this.loginForm))
+        const { data: result } = await this.$http.post('/user/signinByUsername', this.userDto)
+        // console.log(result)
+        if (result.code !== 700) {
+          return this.$message.error('登陆失败')
+        }
+        return this.$message.success('登陆成功')
       })
     }
   }
