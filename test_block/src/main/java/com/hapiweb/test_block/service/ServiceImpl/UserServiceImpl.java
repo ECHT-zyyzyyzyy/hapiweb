@@ -1,7 +1,5 @@
 package com.hapiweb.test_block.service.ServiceImpl;
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.algorithms.Algorithm;
 import com.hapiweb.test_block.dao.UserMapper;
 import com.hapiweb.test_block.dto.UserDTO;
 import com.hapiweb.test_block.entity.User;
@@ -11,7 +9,6 @@ import com.hapiweb.test_block.service.UserService;
 import com.hapiweb.test_block.utils.RedisUtilsSS;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

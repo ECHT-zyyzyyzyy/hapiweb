@@ -62,13 +62,16 @@ export default {
         if (!valid) {
           return console.log('用户名或密码错误')
         }
-        console.log(JSON.stringify(this.loginForm))
+        // console.log(JSON.stringify(this.loginForm))
         const { data: result } = await this.$http.post('/user/signinByUsername', this.userDto)
         // console.log(result)
         if (result.code !== 700) {
           return this.$message.error('登陆失败')
         }
-        return this.$message.success('登陆成功')
+        this.$message.success('登陆成功')
+        // console.log(result)
+        window.sessionStorage.setItem('token', result.token)
+        this.$router.push('/home')
       })
     }
   }
