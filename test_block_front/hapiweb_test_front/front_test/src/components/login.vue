@@ -71,6 +71,7 @@ export default {
         this.$message.success('登陆成功')
         // console.log(result)
         window.sessionStorage.setItem('token', result.token)
+        window.sessionStorage.setItem('username', result.user.username)
         this.$router.push('/home')
       })
     }
