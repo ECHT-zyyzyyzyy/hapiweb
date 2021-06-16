@@ -15,26 +15,30 @@
             background-color="transparent"
             active-text-color="rgb(255, 86, 114)">
             <el-menu-item index="1">{{ userDto.user.username }}</el-menu-item>
-            <el-menu-item index="2">处理中心</el-menu-item>
-            <el-submenu index="3">
-                <template slot="title">我的工作台</template>
-                <el-menu-item index="3-1">选项1</el-menu-item>
-                <el-menu-item index="3-2">选项2</el-menu-item>
-                <el-menu-item index="3-3">选项3</el-menu-item>
-                <el-submenu index="3-4">
-                    <template slot="title">选项4</template>
-                    <el-menu-item index="3-4-1">选项1</el-menu-item>
-                    <el-menu-item index="3-4-2">选项2</el-menu-item>
-                    <el-menu-item index="3-4-3">选项3</el-menu-item>
-                </el-submenu>
-            </el-submenu>
-            <el-menu-item index="4" disabled>消息中心</el-menu-item>
-            <el-menu-item index="5">hapi</el-menu-item>
+            <el-menu-item index="2" @click="logout" style="color: red">退出</el-menu-item>
         </el-menu>
     </el-header>
     <el-container>
-      <el-aside width="200px">Aside</el-aside>
-      <el-main>Main</el-main>
+      <el-aside width="200px">
+        <el-menu
+            default-active="2"
+            class="el-menu-vertical-demo"
+            @open="handleOpen"
+            @close="handleClose"
+            background-color="transparent"
+            text-color="black"
+            active-text-color="rgb(255, 86, 114)">
+          <el-menu-item :index="item.genkey" v-for="item in menuList" :key="item.genkey">
+            <template slot="title">
+              <i class="el-icon-location"></i>
+              <span>{{ item.name }}</span>
+            </template>
+          </el-menu-item>
+        </el-menu>
+      </el-aside>
+      <el-main>
+          <router-view></router-view>
+      </el-main>
     </el-container>
   </el-container>
 </template>
@@ -48,7 +52,8 @@ export default {
           genkey: '',
           username: ''
         }
-      }
+      },
+      menuList: []
     }
   },
   methods: {
@@ -56,9 +61,15 @@ export default {
       window.sessionStorage.clear()
       this.$router.push('login')
       this.$message.success('退出成功')
+    },
+    async getMenuList () {
+      const { data: res } = await this.$http.get('block/list')
+      this.menuList = res.blocks
+      console.log(res)
     }
   },
   created: function () {
+    this.getMenuList()
     this.$data.userDto.user.username = window.sessionStorage.getItem('username')
   }
 }
@@ -70,26 +81,26 @@ export default {
     }
 
     .el-header{
-        background-color: #e0b2b27e;
+        background-color: rgb(255, 255, 255);
         display: flex;
         justify-content: space-between;
         align-items: center;
         font-size: 20px;
+        border-bottom: rgb(216, 216, 216) 1px solid;
+        padding: 1px;
     }
 
     .el-aside{
-        background-color: #bba4c2b4;
+        background-color: #ffffffb4;
+        border: rgb(216, 216, 216) 1px solid;
     }
 
     .el-main{
-        background-color: #ece7e1d2;
+        background-color: #ffffffd2;
     }
 
     .user-block{
         align-items: center;
     }
 
-    .test-color{
-        color:rgb(255, 86, 114)
-    }
 </style>

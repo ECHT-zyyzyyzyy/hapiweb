@@ -45,4 +45,9 @@ public class BlockController {
         return blockDTO1;
     }
 
+    @PostMapping("/addBlock")
+    public BlockDTO addBlock(@RequestBody BlockDTO blockIn){
+        return blockService.addBlock(blockIn);
+    }
+
 }

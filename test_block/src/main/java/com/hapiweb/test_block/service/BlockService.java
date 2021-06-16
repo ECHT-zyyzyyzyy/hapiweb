@@ -16,4 +16,6 @@ public interface BlockService {
     public List<Block> list();
 
     public List<Block> queryForList(String key);
+
+    public BlockDTO addBlock(BlockDTO blockDTO);
 }

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @UserLoginToken(required = true)
@@ -18,6 +19,10 @@ public class BlockServiceImpl implements BlockService {
 
     @Autowired
     BlockMapper blockMapper;
+
+    public static synchronized String getGenkey(){
+        return UUID.randomUUID().toString().replaceAll("-","");
+    }
 
     @Override
     @Transactional
@@ -64,5 +69,23 @@ public class BlockServiceImpl implements BlockService {
         BlockExample.Criteria criteria = blockExample.createCriteria();
         criteria.andNameLike("%" + key + "%");
         return blockMapper.selectByExample(blockExample);
+    }
+
+    @Override
+    @Transactional
+    public BlockDTO addBlock(BlockDTO blockDTO) {
+        Block block = blockDTO.getBlock();
+        BlockExample blockExample = new BlockExample();
+        blockExample.createCriteria().andNameEqualTo(block.getName());
+        List<Block> blocks = blockMapper.selectByExample(blockExample);
+        if(blocks.size()==0){
+            do {
+                block.setGenkey(getGenkey());
+            }while(blockMapper.selectByPrimaryKey(block.getGenkey())!=null);
+            blockMapper.insert(block);
+        }
+        BlockDTO blockDTO1 = new BlockDTO();
+        blockDTO1.setBlock(block);
+        return blockDTO1;
     }
 }
