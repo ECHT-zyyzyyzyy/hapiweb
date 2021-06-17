@@ -27,8 +27,9 @@
             @close="handleClose"
             background-color="transparent"
             text-color="black"
-            active-text-color="rgb(255, 86, 114)">
-          <el-menu-item :index="item.genkey" v-for="item in menuList" :key="item.genkey">
+            active-text-color="rgb(255, 86, 114)"
+            router>
+          <el-menu-item :index=" '/articleList/' + item.genkey" v-for="item in menuList" :key="item.genkey">
             <template slot="title">
               <i class="el-icon-location"></i>
               <span>{{ item.name }}</span>
@@ -87,7 +88,7 @@ export default {
         align-items: center;
         font-size: 20px;
         border-bottom: rgb(216, 216, 216) 1px solid;
-        padding: 1px;
+        padding: 20px;
     }
 
     .el-aside{

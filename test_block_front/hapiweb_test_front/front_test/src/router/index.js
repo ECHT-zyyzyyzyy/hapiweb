@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import Login from './../components/login.vue'
 import Home from './../components/home.vue'
 import Welcome from './../components/welcome.vue'
+import Articles from './../components/articles.vue'
 
 Vue.use(VueRouter)
 
@@ -14,7 +15,8 @@ const routes = [
     component: Home,
     redirect: '/welcome',
     children: [
-      { path: '/welcome', component: Welcome }
+      { path: '/welcome', component: Welcome },
+      { path: '/articleList/:bkey/', component: Articles }
     ]
   }
 ]
