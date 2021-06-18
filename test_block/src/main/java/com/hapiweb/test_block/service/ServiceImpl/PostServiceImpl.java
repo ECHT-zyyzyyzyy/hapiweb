@@ -11,8 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class PostServiceImpl implements PostService {
@@ -88,5 +90,16 @@ public class PostServiceImpl implements PostService {
             return new PostDTO();
         }
         return null;
+    }
+
+    @Override
+    @Transactional
+    public PostListDTO getBlockPost(String key) {
+        PostExample postExample = new PostExample();
+        postExample.createCriteria().andBlockGkEqualTo(key);
+        List<Post> posts = postMapper.selectByExample(postExample).stream().sorted(Comparator.comparing(Post::getTitle)).collect(Collectors.toList());
+        PostListDTO postListDTO = new PostListDTO();
+        postListDTO.setPosts(posts);
+        return postListDTO;
     }
 }

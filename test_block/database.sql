@@ -30,8 +30,8 @@ create table POST
 (
    GENKEY               varchar(32) not null unique,
    TITLE                varchar(128)not null unique,
-   BLOCK_GK             varchar(32) not null unique,
-   AUTHOR_GK            varchar(32)	not null unique,
+   BLOCK_GK             varchar(32) not null,
+   AUTHOR_GK            varchar(32)	not null,
    primary key (GENKEY)
 );
 
@@ -41,11 +41,11 @@ create table POST
 create table REPLY
 (
    GENKEY               varchar(32) not null unique,
-   POST_GK              varchar(32) not null unique,
+   POST_GK              varchar(32) not null,
    LEVEL                integer(4)	not null,
-   AUTHOR_GK            varchar(32)	not null unique,
+   AUTHOR_GK            varchar(32)	not null,
    COMMENT              longtext    not null,
-   REPLY_TO_GK          varchar(32) not null unique,
+   REPLY_TO_GK          varchar(32) not null,
    primary key (GENKEY)
 );
 

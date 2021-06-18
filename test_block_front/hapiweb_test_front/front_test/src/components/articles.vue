@@ -1,5 +1,19 @@
 <template>
-    <h3>文章列表</h3>
+    <div>
+      <el-table
+        :data="artileList"
+        style="width: 100%">
+        <el-table-column
+          prop="title"
+          label="name"
+          width="180">
+        </el-table-column>
+        <el-table-column
+          prop="authorGk"
+          label="author">
+        </el-table-column>
+      </el-table>
+    </div>
 </template>
 
 <script>
@@ -12,8 +26,9 @@ export default {
   methods: {
     async getArticleList () {
       const bkey = this.$route.params.bkey
-      const { data: res } = await this.$http.get('/post/queryForList/' + bkey)
+      const { data: res } = await this.$http.get('/post/getBlockPosts/' + bkey)
       this.artileList = res.posts
+      console.log(res)
     }
   },
   created: function () {

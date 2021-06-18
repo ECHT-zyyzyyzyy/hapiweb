@@ -21,9 +21,15 @@ public class PostController {
         return list;
     }
 
-    @GetMapping("/queryForList")
+    @GetMapping("/queryForList/{key}")
     public PostListDTO queryForList(@PathVariable String key){
         PostListDTO postListDTO = postService.queryForList(key);
+        return postListDTO;
+    }
+
+    @GetMapping("/getBlockPosts/{key}")
+    public PostListDTO getBlockPosts(@PathVariable String key){
+        PostListDTO postListDTO = postService.getBlockPost(key);
         return postListDTO;
     }
 

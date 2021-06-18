@@ -9,6 +9,8 @@ public interface PostService {
 
     public PostListDTO queryForList(String key);
 
+    public PostListDTO getBlockPost(String key);
+
     public PostDTO getPostById(String id);
 
     public PostDTO editPost(PostDTO postDTO);
